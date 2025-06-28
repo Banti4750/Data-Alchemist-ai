@@ -1,0 +1,3 @@
+TaskID,TaskName,Category,Duration,RequiredSkills,PreferredPhases,MaxConcurrent
+T001,Website Redesign,design,3,"design,development","1-3",2
+T002,Marketing Campaign,marketing,2,"marketing,content","2,3,4",3

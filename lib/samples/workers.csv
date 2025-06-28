@@ -1,0 +1,3 @@
+WorkerID,WorkerName,Skills,AvailableSlots,MaxLoadPerPhase,WorkerGroup,QualificationLevel
+WR001,John Doe,"design,development","1,2,3,4",3,design,2
+WR002,Jane Smith,"marketing,content","2,3,4",2,marketing,3

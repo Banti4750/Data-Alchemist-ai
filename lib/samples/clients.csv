@@ -1,0 +1,3 @@
+ClientID,ClientName,PriorityLevel,RequestedTaskIDs,GroupTag,AttributesJSON
+CL001,Acme Corp,3,"T001,T003,T05",enterprise,"{""contractType"":""annual"",""preferredWorkers"":[]}"
+CL002,Startup Inc,4,"T002,T004",startup,"{""contractType"":""monthly""}"
