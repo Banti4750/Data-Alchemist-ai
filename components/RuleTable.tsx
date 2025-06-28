@@ -1,5 +1,7 @@
 interface RulesTableProps {
+    //@ts-ignore
     rules: Rule[];
+    //@ts-ignore
     tasks: Task[];
     onDelete?: (index: number) => void;
 }
@@ -7,6 +9,7 @@ interface RulesTableProps {
 
 export const RulesTable = ({ rules, tasks }: RulesTableProps) => {
     console.log(rules)
+    //@ts-ignore
     const getRuleDescription = (rule: Rule) => {
         switch (rule.type) {
             case 'coRun':

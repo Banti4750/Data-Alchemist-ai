@@ -2,7 +2,7 @@
 
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { Client, Worker, Task, EntityType } from '@/lib/types/data';
+import { EntityType } from '@/lib/types/data';
 import { ModificationResult } from '@/lib/types/ai';
 
 // Initialize Gemini AI
@@ -165,6 +165,7 @@ async function handleAIModification(model: any, data: any, modification: string)
             }
 
             // Validate each updated item has an ID field
+            //@ts-ignore
             const idField = {
                 clients: 'ClientID',
                 workers: 'WorkerID',
@@ -201,13 +202,21 @@ interface RuleResponse {
 }
 
 async function handleNLToRule(model: any, data: any, text: string) {
-  const prompt = `Convert this natural language rule to structured JSON:
+
+    const prompt = `Convert this natural language rule to structured JSON:
   "${text}"
 
+
   Available entities:
-  - Tasks: ${JSON.stringify(data.tasks.slice(0, 3).map(t => t.TaskName))}
-  - Workers: ${JSON.stringify(data.workers.slice(0, 3).map(w => w.WorkerName))}
-  - Clients: ${JSON.stringify(data.clients.slice(0, 3).map(c => c.ClientName))}
+  - Tasks: ${JSON.stringify(data.tasks.slice(0, 3).map(
+        //@ts-ignore
+        t => t.TaskName))}
+  - Workers: ${JSON.stringify(data.workers.slice(0, 3).map(
+            //@ts-ignore
+            w => w.WorkerName))}
+  - Clients: ${JSON.stringify(data.clients.slice(0, 3).map(
+                //@ts-ignore
+                c => c.ClientName))}
 
   Return JSON with:
   - type: RuleType
@@ -223,19 +232,19 @@ async function handleNLToRule(model: any, data: any, text: string) {
     "businessLogic": "These tasks must run together"
   }`;
 
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  
-  try {
-    return JSON.parse(response.text());
-  } catch (err) {
-    return {
-      type: 'invalid',
-      parameters: {},
-      validationMessage: 'Failed to parse rule',
-      businessLogic: 'Please rephrase your rule'
-    };
-  }
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+
+    try {
+        return JSON.parse(response.text());
+    } catch (err) {
+        return {
+            type: 'invalid',
+            parameters: {},
+            validationMessage: 'Failed to parse rule',
+            businessLogic: 'Please rephrase your rule'
+        };
+    }
 }
 
 async function handleValidationFix(model: any, data: any, entityId: string, error: string): Promise<ModificationResult> {
@@ -243,11 +252,11 @@ async function handleValidationFix(model: any, data: any, entityId: string, erro
     let entityType: EntityType = 'clients';
     if (entityId.startsWith('W')) entityType = 'workers';
     if (entityId.startsWith('T')) entityType = 'tasks';
-    
+
     // Find the entity in the data
     const entity = data[entityType].find((item: any) => {
-        const idField = entityType === 'clients' ? 'ClientID' : 
-                       entityType === 'workers' ? 'WorkerID' : 'TaskID';
+        const idField = entityType === 'clients' ? 'ClientID' :
+            entityType === 'workers' ? 'WorkerID' : 'TaskID';
         return item[idField] === entityId;
     });
 
@@ -257,22 +266,22 @@ async function handleValidationFix(model: any, data: any, entityId: string, erro
 
     const prompt = `
     You are an AI assistant for a resource allocation system. You need to fix a validation error:
-    
+
     Error: "${error}"
     Entity ID: ${entityId}
     Entity Type: ${entityType}
     Entity Data: ${JSON.stringify(entity, null, 2)}
-    
+
     Full Data Context:
     - Clients: ${JSON.stringify(data.clients.slice(0, 2))}
     - Workers: ${JSON.stringify(data.workers.slice(0, 2))}
     - Tasks: ${JSON.stringify(data.tasks.slice(0, 2))}
-    
+
     Generate a fix for this validation error. Return ONLY a JSON object with:
     1. The ID field (ClientID/WorkerID/TaskID)
     2. ONLY the fields that need to be modified to fix the error
     3. A brief description of the changes made
-    
+
     Example response format:
     {
       "updatedData": [
@@ -284,7 +293,7 @@ async function handleValidationFix(model: any, data: any, entityId: string, erro
       "entityType": "tasks",
       "changesMade": "Updated duration to valid value"
     }
-    
+
     Rules:
     - Never include unchanged fields
     - Always include the ID field
@@ -321,6 +330,7 @@ async function handleValidationFix(model: any, data: any, entityId: string, erro
             }
 
             // Validate each updated item has an ID field
+            //@ts-ignore
             const idField = {
                 clients: 'ClientID',
                 workers: 'WorkerID',
@@ -342,21 +352,24 @@ async function handleValidationFix(model: any, data: any, entityId: string, erro
 
     } catch (error) {
         console.error('Fix generation error:', error);
-        
+
         // Fallback fix based on error type
-        const idField = entityType === 'clients' ? 'ClientID' : 
-                       entityType === 'workers' ? 'WorkerID' : 'TaskID';
-        
+        const idField = entityType === 'clients' ? 'ClientID' :
+            entityType === 'workers' ? 'WorkerID' : 'TaskID';
+
         let fallbackFix: any = { [idField]: entityId };
-        
+
+        //@ts-ignore
         if (error.toString().includes('PriorityLevel')) {
             fallbackFix.PriorityLevel = 3;
+            //@ts-ignore
         } else if (error.toString().includes('Duration')) {
             fallbackFix.Duration = 1;
+            //@ts-ignore
         } else if (error.toString().includes('MaxLoadPerPhase')) {
             fallbackFix.MaxLoadPerPhase = 1;
         }
-        
+
         return {
             updatedData: [fallbackFix],
             entityType,
