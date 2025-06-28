@@ -173,7 +173,7 @@ async function handleAIModification(model: GeminiModel, data: AIData, modificati
             }
 
             // Validate each updated item has an ID field
-            //@ts-ignore
+           //@ts-expect-error
             const idField = {
                 clients: 'ClientID',
                 workers: 'WorkerID',
@@ -212,24 +212,21 @@ interface RuleResponse {
 
 async function handleNLToRule(model: GeminiModel, data: AIData, text: string): Promise<RuleResponse> {
     // Replace @ts-ignore with proper type checking
-    const taskNames = data.tasks.slice(0, 3).map(t => (t as Task).TaskName);
-    const workerNames = data.workers.slice(0, 3).map(w => (w as Worker).WorkerName);
-    const clientNames = data.clients.slice(0, 3).map(c => (c as Client).ClientName);
+   
 
     const prompt = `Convert this natural language rule to structured JSON:
   "${text}"
 
 
   Available entities:
-  - Tasks: ${JSON.stringify(data.tasks.slice(0, 3).map(
-        //@ts-ignore
-        t => t.TaskName))}
-  - Workers: ${JSON.stringify(data.workers.slice(0, 3).map(
-            //@ts-ignore
-            w => w.WorkerName))}
-  - Clients: ${JSON.stringify(data.clients.slice(0, 3).map(
-                //@ts-ignore
-                c => c.ClientName))}
+  - Tasks: ${JSON.stringify(data.tasks.slice(0, 3).map(t => t.TaskName))}
+        
+  - Workers: ${JSON.stringify(data.workers.slice(0, 3).map(  w => w.WorkerName))}
+           
+          
+  - Clients: ${JSON.stringify(data.clients.slice(0, 3).map(   c => c.ClientName))}
+               
+             
 
   Return JSON with:
   - type: RuleType
@@ -250,7 +247,8 @@ async function handleNLToRule(model: GeminiModel, data: AIData, text: string): P
 
     try {
         return JSON.parse(response.text());
-    } catch (err) {
+    } catch (error) {
+        console.log(error)
         return {
             type: 'invalid',
             parameters: {},
@@ -350,7 +348,7 @@ export async function handleValidationFix(
             }
 
             // Validate each updated item has an ID field
-            //@ts-ignore
+            //@ts-expect-error
             const idField = {
                 clients: 'ClientID',
                 workers: 'WorkerID',
