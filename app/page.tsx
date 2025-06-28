@@ -9,8 +9,7 @@ import { AIAssistant } from '@/components/AIAssistant';
 import { FileUpload } from '@/components/FileUpload';
 import { Client, Worker, Task, EntityType } from '@/lib/types/data';
 import { validateData } from '@/lib/utils/validators';
-//@ts-ignore
-import { Rule } from '@/lib/types/rules';
+
 import { Download, AlertCircle, CheckCircle, Loader2, FileJson, FileSpreadsheet, Upload, Database, Settings, Brain, FileText } from 'lucide-react';
 import { RulesTable } from '@/components/RuleTable';
 import { validateCompleteRule, validateAllRules } from '@/lib/utils/validateRule';
@@ -20,15 +19,16 @@ interface ExportData {
   clients: Client[];
   workers: Worker[];
   tasks: Task[];
+  //@ts-ignore
   rules: Rule[];
   priorities: Record<string, number>;
   timestamp: string;
   version: string;
-  metadata?: {
-    projectName?: string;
-    description?: string;
-    author?: string;
+   metadata: {
+    projectName: string;
+    description: string;
   };
+ 
 }
 
 export default function Dashboard() {
@@ -37,6 +37,7 @@ export default function Dashboard() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [activeEntity, setActiveEntity] = useState<EntityType>('clients');
   const [validationErrors, setValidationErrors] = useState<Record<string, string[]>>({});
+  //@ts-ignore
   const [rules, setRules] = useState<Rule[]>([]);
   const [priorities, setPriorities] = useState<Record<string, number>>({});
   const [filteredData, setFilteredData] = useState<any[]>([]);
@@ -114,65 +115,61 @@ export default function Dashboard() {
     }, 1000);
   }, [handleValidateAll]);
 
-  // const handleFixSuggestion = async (entityId: string, error: string) => {
-  //   try {
-  //     let entityType: EntityType = 'clients';
-  //     if (entityId.startsWith('W')) entityType = 'workers';
-  //     if (entityId.startsWith('T')) entityType = 'tasks';
+  const handleFixSuggestion = async (entityId: string, error: string) => {
+    try {
+      let entityType: EntityType = 'clients';
+      if (entityId.startsWith('W')) entityType = 'workers';
+      if (entityId.startsWith('T')) entityType = 'tasks';
       
-  //     const entityData = 
-  //       entityType === 'clients' ? clients.find(c => c.ClientID === entityId) :
-  //       entityType === 'workers' ? workers.find(w => w.WorkerID === entityId) :
-  //       tasks.find(t => t.TaskID === entityId);
+      const entityData = 
+        entityType === 'clients' ? clients.find(c => c.ClientID === entityId) :
+        entityType === 'workers' ? workers.find(w => w.WorkerID === entityId) :
+        tasks.find(t => t.TaskID === entityId);
       
-  //     if (!entityData) {
-  //       throw new Error(`Entity ${entityId} not found`);
-  //     }
+      if (!entityData) {
+        throw new Error(`Entity ${entityId} not found`);
+      }
       
-  //     const updatedData = { ...entityData };
+      const updatedData = { ...entityData } as Client | Worker | Task;
       
-  //     if (error.includes('PriorityLevel must be between 1-5')) {
-  //       //@ts-ignore
-  //       updatedData.PriorityLevel = 3;
-  //     } else if (error.includes('Duration must be at least 1')) {
-  //       //@ts-ignore
-  //       updatedData.Duration = 1;
-  //     } else if (error.includes('MaxLoadPerPhase must be at least 1')) {
-  //       //@ts-ignore
-  //       updatedData.MaxLoadPerPhase = 1;
-  //     } else if (error.includes('RequestedTaskID') && error.includes('not found')) {
-  //       const invalidTaskId = error.match(/RequestedTaskID ([\w-]+) not found/)?.[1];
-  //       if (invalidTaskId) {
-  //         //@ts-ignore
-  //         const taskIds = updatedData.RequestedTaskIDs.split(',').map(id => id.trim());
-  //         //@ts-ignore
-  //         updatedData.RequestedTaskIDs = taskIds.filter(id => id !== invalidTaskId).join(',');
-  //       }
-  //     } else if (error.includes('No worker has required skill')) {
-  //       const missingSkill = error.match(/No worker has required skill: ([\w-]+)/)?.[1];
-  //       if (missingSkill && workers.length > 0) {
-  //         const firstWorker = { ...workers[0] };
-  //         firstWorker.Skills = firstWorker.Skills ? `${firstWorker.Skills},${missingSkill}` : missingSkill;
+      if (error.includes('PriorityLevel must be between 1-5')) {
+        (updatedData as Client).PriorityLevel = 3;
+      } else if (error.includes('Duration must be at least 1')) {
+        (updatedData as Task).Duration = 1;
+      } else if (error.includes('MaxLoadPerPhase must be at least 1')) {
+        (updatedData as Worker).MaxLoadPerPhase = 1;
+      } else if (error.includes('RequestedTaskID') && error.includes('not found')) {
+        const invalidTaskId = error.match(/RequestedTaskID ([\w-]+) not found/)?.[1];
+        if (invalidTaskId && 'RequestedTaskIDs' in updatedData) {
+          const taskIds = updatedData.RequestedTaskIDs.split(',').map(id => id.trim());
+          updatedData.RequestedTaskIDs = taskIds.filter(id => id !== invalidTaskId).join(',');
+        }
+      } else if (error.includes('No worker has required skill')) {
+        const missingSkill = error.match(/No worker has required skill: ([\w-]+)/)?.[1];
+        if (missingSkill && workers.length > 0) {
+          const firstWorker = { ...workers[0] } as Worker;
+          firstWorker.Skills = firstWorker.Skills ? `${firstWorker.Skills},${missingSkill}` : missingSkill;
           
-  //         const workerUpdates = [firstWorker];
-  //         handleDataChange(workerUpdates, 'workers');
+          const workerUpdates = [firstWorker];
+          handleDataChange(workerUpdates, 'workers');
           
-  //         toast.success(`Added missing skill '${missingSkill}' to worker ${firstWorker.WorkerName}`);
-  //         return;
-  //       }
-  //     }
+          toast.success(`Added missing skill '${missingSkill}' to worker ${firstWorker.WorkerName}`);
+          return;
+        }
+      }
       
-  //     const updates = [updatedData];
-  //     handleDataChange(updates, entityType);
+      const updates = [updatedData];
+      //@ts-ignore
+      handleDataChange(updates, entityType);
       
-  //     toast.success(`Fixed error for ${entityId}`);
-  //   } catch (error) {
-  //     console.error('Fix error:', error);
-  //     toast.error('Failed to apply fix');
-  //   }
-  // };
+      toast.success(`Fixed error for ${entityId}`);
+    } catch (error) {
+      console.error('Fix error:', error);
+      toast.error('Failed to apply fix');
+    }
+  };
 
-  const handleDataParsed = (data: any[], entityType: EntityType) => {
+  const handleDataParsed = (data: Client[] | Worker[] | Task[], entityType: EntityType) => {
     switch (entityType) {
       case 'clients':
         setClients(data as Client[]);
@@ -188,11 +185,14 @@ export default function Dashboard() {
     toast.success(`${entityType} data loaded successfully`);
   };
 
-  const handleDataChange = (newData: any[], entityType: EntityType) => {
+  const handleDataChange = (newData: Client[] | Worker[] | Task[], entityType: EntityType) => {
     const fullUpdatedData = newData.map(item => {
       const original =
+      //@ts-ignore
         entityType === 'clients' ? clients.find(c => c.ClientID === item.ClientID) :
+        //@ts-ignore
           entityType === 'workers' ? workers.find(w => w.WorkerID === item.WorkerID) :
+          //@ts-ignore
             tasks.find(t => t.TaskID === item.TaskID);
       return { ...original, ...item };
     });
@@ -210,7 +210,7 @@ export default function Dashboard() {
     }
   };
 
-  const handleSearchResults = (results: any[], entityType: string) => {
+  const handleSearchResults = (results: Client[] | Worker[] | Task[], entityType: string) => {
     setFilteredData(results);
     setActiveEntity(entityType as EntityType);
     setIsSearchActive(true);
@@ -221,6 +221,7 @@ export default function Dashboard() {
     setIsSearchActive(false);
   };
 
+  //@ts-ignore
   const handleAddRule = (newRule: Rule) => {
     const validatedRule = validateCompleteRule(newRule, tasks, workers);
     setRules([...rules, validatedRule]);
@@ -410,6 +411,7 @@ export default function Dashboard() {
                     activeEntity === 'clients' ? clients :
                       activeEntity === 'workers' ? workers : tasks}
                   entityType={activeEntity}
+                  //@ts-ignore
                   onDataChange={(newData) => handleDataChange(newData, activeEntity)}
                   validationErrors={validationErrors}
                 />
@@ -429,10 +431,10 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <div className="p-6">
-                  {/* <ValidationPanel
+                  <ValidationPanel
                     errors={validationErrors}
-                    // onFixSuggestion={handleFixSuggestion}
-                  /> */}
+                    onFixSuggestion={handleFixSuggestion}
+                  />
                 </div>
               </div>
             )}
@@ -455,7 +457,7 @@ export default function Dashboard() {
                   tasks={tasks}
                   onSearchResults={handleSearchResults}
                   //@ts-ignore
-                  onDataModified={handleDataChange}
+                  onDataModified={(data, type) => handleDataChange(data, type as EntityType)}
                   onResetSearch={handleResetSearch}
                 />
               </div>

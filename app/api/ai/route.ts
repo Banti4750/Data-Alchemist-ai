@@ -3,7 +3,7 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { EntityType } from '@/lib/types/data';
-import { ModificationResult } from '@/lib/types/ai';
+// import { ModificationResult } from '@/lib/types/ai';
 
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
@@ -46,9 +46,17 @@ export async function POST(request: Request) {
     }
 }
 
-async function handleAISearch(model: any, data: any, query: string) {
-    // const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+interface GeminiModel {
+    generateContent: (params: any) => Promise<any>;
+}
 
+interface AIData {
+    clients: Client[];
+    workers: Worker[];
+    tasks: Task[];
+}
+
+async function handleAISearch(model: GeminiModel, data: AIData, query: string) {
     const prompt = `
     You are an AI assistant for a resource allocation system. The user wants to search their data with this query:
     "${query}"
@@ -96,7 +104,7 @@ async function handleAISearch(model: any, data: any, query: string) {
 }
 
 // 2. Fixed Modify Endpoint
-async function handleAIModification(model: any, data: any, modification: string) {
+async function handleAIModification(model: GeminiModel, data: AIData, modification: string) {
     const prompt = `
     You are a data editor. Strictly follow these rules:
     1. Instruction: "${modification}"
@@ -195,13 +203,18 @@ async function handleAIModification(model: any, data: any, modification: string)
 }
 
 interface RuleResponse {
-    type: 'coRun' | 'slotRestriction' | 'loadLimit' | 'phaseWindow' | 'patternMatch' | 'precedence';
+    type:  'invalid' |'coRun' | 'slotRestriction' | 'loadLimit' | 'phaseWindow' | 'patternMatch' | 'precedence';
     parameters: Record<string, any>;
     valid: boolean;
     validationMessage?: string;
+    businessLogic:string
 }
 
-async function handleNLToRule(model: any, data: any, text: string) {
+async function handleNLToRule(model: GeminiModel, data: AIData, text: string): Promise<RuleResponse> {
+    // Replace @ts-ignore with proper type checking
+    const taskNames = data.tasks.slice(0, 3).map(t => (t as Task).TaskName);
+    const workerNames = data.workers.slice(0, 3).map(w => (w as Worker).WorkerName);
+    const clientNames = data.clients.slice(0, 3).map(c => (c as Client).ClientName);
 
     const prompt = `Convert this natural language rule to structured JSON:
   "${text}"
@@ -241,13 +254,20 @@ async function handleNLToRule(model: any, data: any, text: string) {
         return {
             type: 'invalid',
             parameters: {},
+             valid:false,
             validationMessage: 'Failed to parse rule',
             businessLogic: 'Please rephrase your rule'
         };
     }
 }
 
-async function handleValidationFix(model: any, data: any, entityId: string, error: string): Promise<ModificationResult> {
+// Update handleValidationFix signature
+export async function handleValidationFix(
+  model: GeminiModel,
+  data: AIData,
+  entityId: string,
+  error: string
+): Promise<ModificationResult> {
     // Determine entity type from ID format
     let entityType: EntityType = 'clients';
     if (entityId.startsWith('W')) entityType = 'workers';
@@ -376,4 +396,35 @@ async function handleValidationFix(model: any, data: any, entityId: string, erro
             changesMade: `Applied default fix for ${error}`
         };
     }
+}
+
+interface Client {
+  ClientID: string;
+  ClientName: string;
+  PriorityLevel?: number;
+}
+
+interface Worker {
+  WorkerID: string;
+  WorkerName: string;
+  MaxLoadPerPhase?: number;
+}
+
+interface Task {
+  TaskID: string;
+  TaskName: string;
+  Duration?: number;
+}
+
+interface UpdatedDataItem {
+  ClientID?: string;
+  WorkerID?: string;
+  TaskID?: string;
+  [key: string]: unknown;
+}
+
+interface ModificationResult {
+  updatedData: UpdatedDataItem[];
+  entityType: EntityType;
+  changesMade: string;
 }
