@@ -1,22 +1,28 @@
-<p align="center">
-    <img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/ec559a9f6bfd399b82bb44393651661b08aaf7ba/icons/folder-markdown-open.svg" align="center" width="30%">
-</p>
-<p align="center"><h1 align="center">DATA-ALCHEMIST-AI</h1></p>
-<p align="center">
+<div align="left" style="position: relative;">
+<img src="https://img.icons8.com/?size=512&id=55494&format=png" align="right" width="30%" style="margin: -20px 0 0 20px;">
+<h1>DATA-ALCHEMIST-AI</h1>
+<p align="left">
 	<em><code>❯ REPLACE-ME</code></em>
 </p>
-<p align="center">
-	<img src="https://img.shields.io/github/license/Banti4750/Data-Alchemist-ai?style=default&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
-	<img src="https://img.shields.io/github/last-commit/Banti4750/Data-Alchemist-ai?style=default&logo=git&logoColor=white&color=0080ff" alt="last-commit">
-	<img src="https://img.shields.io/github/languages/top/Banti4750/Data-Alchemist-ai?style=default&color=0080ff" alt="repo-top-language">
-	<img src="https://img.shields.io/github/languages/count/Banti4750/Data-Alchemist-ai?style=default&color=0080ff" alt="repo-language-count">
+<p align="left">
+	<img src="https://img.shields.io/github/license/Banti4750/Data-Alchemist-ai?style=flat-square&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
+	<img src="https://img.shields.io/github/last-commit/Banti4750/Data-Alchemist-ai?style=flat-square&logo=git&logoColor=white&color=0080ff" alt="last-commit">
+	<img src="https://img.shields.io/github/languages/top/Banti4750/Data-Alchemist-ai?style=flat-square&color=0080ff" alt="repo-top-language">
+	<img src="https://img.shields.io/github/languages/count/Banti4750/Data-Alchemist-ai?style=flat-square&color=0080ff" alt="repo-language-count">
 </p>
-<p align="center"><!-- default option, no dependency badges. -->
+<p align="left">Built with the tools and technologies:</p>
+<p align="left">
+	<img src="https://img.shields.io/badge/npm-CB3837.svg?style=flat-square&logo=npm&logoColor=white" alt="npm">
+	<img src="https://img.shields.io/badge/JavaScript-F7DF1E.svg?style=flat-square&logo=JavaScript&logoColor=black" alt="JavaScript">
+	<img src="https://img.shields.io/badge/React-61DAFB.svg?style=flat-square&logo=React&logoColor=black" alt="React">
+	<img src="https://img.shields.io/badge/TypeScript-3178C6.svg?style=flat-square&logo=TypeScript&logoColor=white" alt="TypeScript">
+	<img src="https://img.shields.io/badge/Zod-3E67B1.svg?style=flat-square&logo=Zod&logoColor=white" alt="Zod">
+	<img src="https://img.shields.io/badge/ESLint-4B32C3.svg?style=flat-square&logo=ESLint&logoColor=white" alt="ESLint">
+	<img src="https://img.shields.io/badge/OpenAI-412991.svg?style=flat-square&logo=OpenAI&logoColor=white" alt="OpenAI">
+	<img src="https://img.shields.io/badge/Axios-5A29E4.svg?style=flat-square&logo=Axios&logoColor=white" alt="Axios">
 </p>
-<p align="center">
-	<!-- default option, no dependency badges. -->
-</p>
-<br>
+</div>
+<br clear="right">
 
 ## 🔗 Table of Contents
 
@@ -55,7 +61,10 @@
     ├── README.md
     ├── app
     │   ├── (dashboard)
+    │   │   └── page.tsx
     │   ├── api
+    │   │   └── ai
+    │   │       └── route.ts
     │   ├── favicon.ico
     │   ├── globals.css
     │   ├── layout.tsx
@@ -73,8 +82,18 @@
     ├── eslint.config.mjs
     ├── lib
     │   ├── samples
+    │   │   ├── clients.csv
+    │   │   ├── tasks.csv
+    │   │   └── workers.csv
     │   ├── types
+    │   │   ├── ai.ts
+    │   │   ├── data.ts
+    │   │   └── rules.ts
     │   └── utils
+    │       ├── ai-helpers.ts
+    │       ├── parsers.ts
+    │       ├── validateRule.ts
+    │       └── validators.ts
     ├── next.config.ts
     ├── package-lock.json
     ├── package.json
