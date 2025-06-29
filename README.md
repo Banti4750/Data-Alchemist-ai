@@ -46,6 +46,18 @@
 </p>
 
 
+## 🎥 Live Demo
+
+> 🔗 [Click here to watch the walkthrough video on Loom](https://www.loom.com/share/dd4d558584ce4ee7965025a4d2543c6a?sid=27c3a765-0a56-438d-94d8-31b82987ce38)
+
+<p align="center">
+  <a href="https://www.loom.com/share/dd4d558584ce4ee7965025a4d2543c6a?sid=27c3a765-0a56-438d-94d8-31b82987ce38" target="_blank">
+    <img src="https://cdn.loom.com/sessions/thumbnails/dd4d558584ce4ee7965025a4d2543c6a-with-play.gif" alt="Loom Demo" width="70%" />
+  </a>
+</p>
+
+
+
 
 An AI-powered web application for managing and optimizing resource allocation across clients, workers, and tasks. Features intelligent data validation, natural language rule creation, and real-time visualization.
 
