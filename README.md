@@ -1,3 +1,8 @@
+
+
+
+
+
 <div align="left" style="position: relative;">
 <img src="https://img.icons8.com/?size=512&id=55494&format=png" align="right" width="30%" style="margin: -20px 0 0 20px;">
 <h1>DATA-ALCHEMIST-AI</h1>
@@ -23,6 +28,60 @@
 </p>
 </div>
 <br clear="right">
+
+# Resource Allocation Configurator
+
+![Dashboard Screenshot](./public/screenshot.png)
+
+An AI-powered web application for managing and optimizing resource allocation across clients, workers, and tasks. Features intelligent data validation, natural language rule creation, and real-time visualization.
+
+## Features
+
+### AI-Powered Functionality
+- **Natural Language Processing**: Convert plain English rules into system configurations
+- **Smart Data Parsing**: Automatically map messy CSV headers to correct fields
+- **Validation Suggestions**: AI-powered error detection and fix recommendations
+- **Conversational UI**: Chat-based interface for complex queries
+
+### Data Management
+- **Multi-Format Import**: CSV/XLSX file upload for clients, workers, and tasks
+- **Inline Editing**: Directly modify data in table views
+- **Advanced Validation**: 10+ built-in validation rules with visual feedback
+- **Export Ready**: Generate clean JSON/CSV for downstream systems
+
+### Visualization
+- **Interactive Grids**: Sortable, filterable data tables with error highlighting
+- **Rules Dashboard**: Visual representation of business rules and constraints
+- **Priority Controls**: Intuitive sliders for allocation preferences
+- **Validation Overview**: At-a-glance system health status
+
+## Technology Stack
+
+### Core Technologies
+- **Frontend**: Next.js 14 (App Router), React 18, TypeScript
+- **Styling**: Tailwind CSS, CSS Modules
+- **Visualization**: Custom SVG components, React-Table (for grids)
+- **AI Integration**: Google Gemini API
+
+### Key Libraries
+| Purpose            | Libraries                          |
+|--------------------|-----------------------------------|
+| Data Processing    | Papaparse, XLSX                   |
+| UI Components      | Radix UI, Lucide React            |
+| State Management   | Zustand (local state)             |
+| Notifications      | Sonner (toasts)                   |
+| Date Handling      | date-fns                          |
+
+## Getting Started
+
+### Prerequisites
+- Node.js 18+
+- Google Gemini API key (for AI features)
+
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/resource-allocator.git
 
 ## 🔗 Table of Contents
 
