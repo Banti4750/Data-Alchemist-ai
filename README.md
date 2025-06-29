@@ -31,7 +31,17 @@
 
 # Resource Allocation Configurator
 
-![Global](https://raw.githubusercontent.com/Banti4750/Data-Alchemist-ai/main/public/globe.svg)
+## 📸 Demo Screenshots
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Banti4750/Data-Alchemist-ai/main/public/1.png" width="30%" style="margin:5px;" />
+  <img src="https://raw.githubusercontent.com/Banti4750/Data-Alchemist-ai/main/public/2.png" width="30%" style="margin:5px;" />
+  <img src="https://raw.githubusercontent.com/Banti4750/Data-Alchemist-ai/main/public/3.png" width="30%" style="margin:5px;" />
+  <br/>
+  <img src="https://raw.githubusercontent.com/Banti4750/Data-Alchemist-ai/main/public/4.png" width="30%" style="margin:5px;" />
+  <img src="https://raw.githubusercontent.com/Banti4750/Data-Alchemist-ai/main/public/5.png" width="30%" style="margin:5px;" />
+</p>
+
 
 
 An AI-powered web application for managing and optimizing resource allocation across clients, workers, and tasks. Features intelligent data validation, natural language rule creation, and real-time visualization.
