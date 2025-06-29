@@ -31,7 +31,8 @@
 
 # Resource Allocation Configurator
 
-![Dashboard Screenshot](./public/global.svg)
+![Global](https://raw.githubusercontent.com/Banti4750/Data-Alchemist-ai/main/public/global.svg)
+
 
 An AI-powered web application for managing and optimizing resource allocation across clients, workers, and tasks. Features intelligent data validation, natural language rule creation, and real-time visualization.
 
