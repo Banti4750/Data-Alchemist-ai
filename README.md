@@ -34,12 +34,15 @@
 ## 📸 Demo Screenshots
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Banti4750/Data-Alchemist-ai/main/public/1.png" width="30%" style="margin:5px;" />
-  <img src="https://raw.githubusercontent.com/Banti4750/Data-Alchemist-ai/main/public/2.png" width="30%" style="margin:5px;" />
-  <img src="https://raw.githubusercontent.com/Banti4750/Data-Alchemist-ai/main/public/3.png" width="30%" style="margin:5px;" />
-  <br/>
-  <img src="https://raw.githubusercontent.com/Banti4750/Data-Alchemist-ai/main/public/4.png" width="30%" style="margin:5px;" />
-  <img src="https://raw.githubusercontent.com/Banti4750/Data-Alchemist-ai/main/public/5.png" width="30%" style="margin:5px;" />
+  <img src="https://raw.githubusercontent.com/Banti4750/Data-Alchemist-ai/main/public/1.png" width="80%" alt="Screenshot 1"/>
+  <br />
+  <img src="https://raw.githubusercontent.com/Banti4750/Data-Alchemist-ai/main/public/2.png" width="80%" alt="Screenshot 2"/>
+  <br />
+  <img src="https://raw.githubusercontent.com/Banti4750/Data-Alchemist-ai/main/public/3.png" width="80%" alt="Screenshot 3"/>
+  <br />
+  <img src="https://raw.githubusercontent.com/Banti4750/Data-Alchemist-ai/main/public/4.png" width="80%" alt="Screenshot 4"/>
+  <br />
+  <img src="https://raw.githubusercontent.com/Banti4750/Data-Alchemist-ai/main/public/5.png" width="80%" alt="Screenshot 5"/>
 </p>
 
 
